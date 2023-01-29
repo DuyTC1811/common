@@ -1,4 +1,13 @@
 package io.cqrs.commands;
 
-public abstract class BaseCommand {
+import io.cqrs.messages.Message;
+
+public abstract class BaseCommand extends Message {
+    public BaseCommand() {
+    }
+
+    public BaseCommand(String id) {
+        super(id);
+    }
+
 }

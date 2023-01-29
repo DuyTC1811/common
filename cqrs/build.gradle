@@ -7,9 +7,13 @@ group 'org.monkey'
 version '0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-repositories { mavenCentral() }
+repositories {
+    mavenCentral()
+}
 
-dependencies { }
+dependencies {
+
+}
 
 publishing {
     publications {

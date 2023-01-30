@@ -1,0 +1,22 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group 'org.monkey'
+version '0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) { from components.java }
+    }
+}

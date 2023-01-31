@@ -1,4 +1,9 @@
 package io.cqrs.handlers;
 
-public interface EventSourcingHandler {
+import io.cqrs.domain.AggregateRoot;
+
+public interface EventSourcingHandler<T> {
+    void save(AggregateRoot aggregate);
+    T getById(String id);
+    void republishEvents();
 }

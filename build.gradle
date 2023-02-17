@@ -1,18 +1,23 @@
-plugins {
-    id 'java-library'
-    id 'maven-publish'
-}
+allprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
 
-group 'org.monkey'
-version '0.1-SNAPSHOT'
-sourceCompatibility = '11'
+    group 'org.monkey'
+    version '0.1-SNAPSHOT'
+    sourceCompatibility = '11'
 
-repositories { mavenCentral() }
+    repositories { mavenCentral() }
 
-dependencies { }
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web:2.7.8'
+    }
 
-publishing {
-    publications {
-        maven(MavenPublication) { from components.java }
+    publishing {
+        publications {
+            maven(MavenPublication) { from components.java }
+        }
     }
 }
+
+
+

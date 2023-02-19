@@ -1,3 +1,4 @@
 rootProject.name = 'common'
 include 'cqrs'
 include 'exceptions'
+include 'utilities'

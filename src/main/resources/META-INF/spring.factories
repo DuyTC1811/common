@@ -1,2 +1,0 @@
-# important it is used to automatically post Bean with ApplicationContext
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=

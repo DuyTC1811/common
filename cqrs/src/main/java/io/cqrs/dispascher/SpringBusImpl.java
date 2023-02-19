@@ -8,10 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SpringBusImpl implements ISpringBus {
-    private Registry registry;
-
-    public SpringBusImpl() {
-    }
+    private final Registry registry;
 
     public SpringBusImpl(Registry registry) {
         this.registry = registry;

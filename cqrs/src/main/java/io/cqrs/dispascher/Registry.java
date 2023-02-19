@@ -30,6 +30,7 @@ public class Registry {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void registerCommand(ApplicationContext applicationContext, String name) {
         Class<ICommandHandler<?, ?>> handlerClass = (Class<ICommandHandler<?, ?>>) applicationContext.getType(name);
         Class<?>[] generics = GenericTypeResolver.resolveTypeArguments(handlerClass, ICommandHandler.class);
@@ -37,6 +38,7 @@ public class Registry {
         commandProviderMap.put(commandType, new CommandProvider(applicationContext, handlerClass));
     }
 
+    @SuppressWarnings("unchecked")
     private void registerQuery(ApplicationContext applicationContext, String name) {
         Class<IQueryHandler<?, ?>> handlerClass = (Class<IQueryHandler<?, ?>>) applicationContext.getType(name);
         Class<?>[] generics = GenericTypeResolver.resolveTypeArguments(handlerClass, IQueryHandler.class);

@@ -4,18 +4,20 @@ import io.cqrs.command.ICommand;
 import io.cqrs.dispascher.ISpringBus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
-public abstract class ControllerCommand<RESPONSE, REQUEST extends ICommand<RESPONSE>> implements IControllerCommand<RESPONSE, REQUEST> {
-    private ISpringBus springBus;
+@Component
+public abstract class CommandController<RESPONSE, REQUEST extends ICommand<RESPONSE>> {
 
-    public ControllerCommand() {
-    }
+    private final ISpringBus springBus;
 
-    protected ControllerCommand(ISpringBus springBus) {
+    public CommandController(ISpringBus springBus) {
         this.springBus = springBus;
     }
 
     public ResponseEntity<RESPONSE> execute(REQUEST request) {
         return new ResponseEntity<>(springBus.executeCommand(request), HttpStatus.OK);
     }
+
+    protected abstract ResponseEntity<RESPONSE> coordinator(REQUEST request);
 }

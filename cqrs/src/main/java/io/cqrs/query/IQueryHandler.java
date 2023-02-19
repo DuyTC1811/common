@@ -1,5 +1,5 @@
 package io.cqrs.query;
 
-public interface IQueryHandler<R, C extends IQuery<R>> {
-    R handle(C query);
+public interface IQueryHandler<RESPONSE, REQUEST extends IQuery<RESPONSE>> {
+    RESPONSE handle(REQUEST query);
 }

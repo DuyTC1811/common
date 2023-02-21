@@ -4,7 +4,6 @@ import io.cqrs.command.ICommand;
 import io.cqrs.command.ICommandHandler;
 import io.cqrs.query.IQuery;
 import io.cqrs.query.IQueryHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,6 +25,6 @@ public class SpringBusImpl implements ISpringBus {
     @SuppressWarnings("unchecked")
     public <RESPONSE, REQUEST extends IQuery<RESPONSE>> RESPONSE executeQuery(REQUEST query) {
         IQueryHandler<RESPONSE, REQUEST> IQueryHandler = (IQueryHandler<RESPONSE, REQUEST>) registry.getQuery(query.getClass());
-        return IQueryHandler.handle(query);
+        return IQueryHandler.handler(query);
     }
 }

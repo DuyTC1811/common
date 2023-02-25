@@ -17,14 +17,14 @@ public class SpringBusImpl implements ISpringBus {
     @Override
     @SuppressWarnings("unchecked")
     public <RESPONSE, REQUEST extends ICommand<RESPONSE>> RESPONSE executeCommand(REQUEST command) {
-        ICommandHandler<RESPONSE, REQUEST> ICommandHandler = (ICommandHandler<RESPONSE, REQUEST>) registry.getCmd(command.getClass());
-        return ICommandHandler.handler(command);
+        ICommandHandler<RESPONSE, REQUEST> commandHandler = (ICommandHandler<RESPONSE, REQUEST>) registry.getCmd(command.getClass());
+        return commandHandler.handler(command);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <RESPONSE, REQUEST extends IQuery<RESPONSE>> RESPONSE executeQuery(REQUEST query) {
-        IQueryHandler<RESPONSE, REQUEST> IQueryHandler = (IQueryHandler<RESPONSE, REQUEST>) registry.getQuery(query.getClass());
-        return IQueryHandler.handler(query);
+        IQueryHandler<RESPONSE, REQUEST> queryHandler = (IQueryHandler<RESPONSE, REQUEST>) registry.getQuery(query.getClass());
+        return queryHandler.handler(query);
     }
 }

@@ -1,0 +1,47 @@
+plugins {
+    id 'idea'
+    id 'java'
+    id 'com.google.protobuf' version '0.8.18'
+}
+
+group 'org.monkey'
+version '0.1-SNAPSHOT'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+def grpcVersion = '1.51.0'
+def protobufVersion = '3.21.7'
+def protocVersion = protobufVersion
+
+repositories {
+    maven { // The google mirror is less flaky than mavenCentral()
+        url "https://maven-central.storage-download.googleapis.com/maven2/" }
+    mavenCentral()
+}
+
+dependencies {
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}

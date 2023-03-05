@@ -4,9 +4,9 @@ import io.cqrs.command.ICommand;
 import io.cqrs.command.ICommandHandler;
 import io.cqrs.query.IQuery;
 import io.cqrs.query.IQueryHandler;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+@Configuration
 public class SpringBusImpl implements ISpringBus {
     private final Registry registry;
 

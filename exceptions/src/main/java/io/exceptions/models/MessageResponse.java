@@ -1,4 +1,4 @@
-package io.exceptions;
+package io.exceptions.models;
 
 public class MessageResponse {
 }

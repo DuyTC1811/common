@@ -19,6 +19,16 @@ allprojects {
             maven(MavenPublication) { from components.java }
         }
     }
+
+//    repositories {
+//        maven {
+//            url "https://maven.pkg.jetbrains.space/my-registry/p/my-group/maven"
+//            credentials {
+//                username = System.getenv("MY_REGISTRY_USERNAME")
+//                password = System.getenv("MY_REGISTRY_PASSWORD")
+//            }
+//        }
+//    }
 }
 
 

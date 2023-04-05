@@ -9,7 +9,6 @@ import io.cqrs.query.QueryProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.GenericTypeResolver;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;

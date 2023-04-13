@@ -12,6 +12,8 @@ allprojects {
         compileOnly 'org.projectlombok:lombok:1.18.24'
         annotationProcessor 'org.projectlombok:lombok:1.18.24'
         implementation 'org.springframework.boot:spring-boot-starter-web:2.7.8'
+        implementation 'redis.clients:jedis:4.3.1'
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.7.5'
     }
 
     publishing {

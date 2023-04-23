@@ -17,20 +17,19 @@ allprojects {
     }
 
     publishing {
+        repositories {
+            maven {
+                url = uri("https://maven.pkg.github.com/DuyTC1811/common")
+                credentials {
+                    username = project.findProperty("gpr.user")
+                    password = project.findProperty("gpr.key")
+                }
+            }
+        }
         publications {
-            maven(MavenPublication) { from components.java }
+            commond(MavenPublication) { from components.java }
         }
     }
-
-//    repositories {
-//        maven {
-//            url "https://maven.pkg.jetbrains.space/my-registry/p/my-group/maven"
-//            credentials {
-//                username = System.getenv("MY_REGISTRY_USERNAME")
-//                password = System.getenv("MY_REGISTRY_PASSWORD")
-//            }
-//        }
-//    }
 }
 
 

@@ -12,7 +12,7 @@ public abstract class QueryController<RESPONSE, REQUEST extends IQuery<RESPONSE>
     @Autowired
     private ISpringBus springBus;
 
-    public QueryController() {
+    protected QueryController() {
     }
 
     public ResponseEntity<RESPONSE> execute(REQUEST request) {

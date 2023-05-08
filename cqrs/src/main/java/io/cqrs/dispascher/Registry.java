@@ -3,13 +3,12 @@ package io.cqrs.dispascher;
 import io.cqrs.command.CommandProvider;
 import io.cqrs.command.ICommand;
 import io.cqrs.command.ICommandHandler;
-import io.cqrs.query.IQuery;
-import io.cqrs.query.IQueryHandler;
-import io.cqrs.query.QueryProvider;
+import io.cqrs.query.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.GenericTypeResolver;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,16 +17,28 @@ public class Registry {
 
     private final Map<Class<? extends ICommand>, CommandProvider> commandProviderMap = new HashMap<>();
     private final Map<Class<? extends IQuery>, QueryProvider> queryProviderMap = new HashMap<>();
+    private final Map<Class<? extends IPage>, PageProvider> qageProviderMap = new HashMap<>();
 
     public Registry(ApplicationContext applicationContext) {
-        String[] names = applicationContext.getBeanNamesForType(ICommandHandler.class);
-        for (String name : names) {
-            registerCommand(applicationContext, name);
-        }
-        names = applicationContext.getBeanNamesForType(IQueryHandler.class);
-        for (String name : names) {
-            registerQuery(applicationContext, name);
-        }
+        // Register ICommandHandler
+        Arrays.stream(applicationContext.getBeanNamesForType(ICommandHandler.class))
+                .forEach(name -> registerCommand(applicationContext, name));
+
+        // Register IQueryHandler
+        Arrays.stream(applicationContext.getBeanNamesForType(IQueryHandler.class))
+                .forEach(name -> registerQuery(applicationContext, name));
+
+        // Register IPageHandler
+        Arrays.stream(applicationContext.getBeanNamesForType(IPageHandler.class))
+                .forEach(name -> registerPage(applicationContext, name));
+    }
+
+    @SuppressWarnings({"unchecked"})
+    private void registerPage(ApplicationContext applicationContext, String name) {
+        Class<IPageHandler<?, ?>> handlerClass = (Class<IPageHandler<?, ?>>) applicationContext.getType(name);
+        Class<?>[] generics = GenericTypeResolver.resolveTypeArguments(handlerClass, IPageHandler.class);
+        Class<? extends IPage> pageType = (Class<? extends IPage>) generics[1];
+        qageProviderMap.put(pageType, new PageProvider(applicationContext, handlerClass));
     }
 
     @SuppressWarnings("unchecked")
@@ -44,6 +55,11 @@ public class Registry {
         Class<?>[] generics = GenericTypeResolver.resolveTypeArguments(handlerClass, IQueryHandler.class);
         Class<? extends IQuery> queryType = (Class<? extends IQuery>) generics[1];
         queryProviderMap.put(queryType, new QueryProvider(applicationContext, handlerClass));
+    }
+
+    @SuppressWarnings("unchecked")
+    <RESPONSE, REQUEST extends IPage<RESPONSE>> IPageHandler<RESPONSE, REQUEST> getPage(Class<REQUEST> commandClass) {
+        return qageProviderMap.get(commandClass).get();
     }
 
     @SuppressWarnings("unchecked")

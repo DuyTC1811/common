@@ -2,6 +2,7 @@ package io.cqrs.controller;
 
 import io.cqrs.command.ICommand;
 import io.cqrs.dispascher.ISpringBus;
+import io.cqrs.model.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,9 @@ public abstract class CommandController<RESPONSE, REQUEST extends ICommand<RESPO
     public CommandController() {
     }
 
-    public ResponseEntity<RESPONSE> execute(REQUEST request) {
+    public ResponseEntity<BaseResponse<RESPONSE>> execute(REQUEST request) {
         return new ResponseEntity<>(springBus.executeCommand(request), HttpStatus.OK);
     }
 
-    protected abstract ResponseEntity<RESPONSE> coordinator(REQUEST request);
+    protected abstract ResponseEntity<BaseResponse<RESPONSE>> executeCommand(REQUEST request);
 }

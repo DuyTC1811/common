@@ -1,6 +1,7 @@
 package io.cqrs.controller;
 
 import io.cqrs.dispascher.ISpringBus;
+import io.cqrs.model.BaseResponse;
 import io.cqrs.query.IQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,9 @@ public abstract class QueryController<RESPONSE, REQUEST extends IQuery<RESPONSE>
     protected QueryController() {
     }
 
-    public ResponseEntity<RESPONSE> execute(REQUEST request) {
+    public ResponseEntity<BaseResponse<RESPONSE>> execute(REQUEST request) {
         return new ResponseEntity<>(springBus.executeQuery(request), HttpStatus.OK);
     }
 
-    protected abstract ResponseEntity<RESPONSE> coordinator(REQUEST request);
+    protected abstract ResponseEntity<BaseResponse<RESPONSE>> executeQuery(REQUEST request);
 }

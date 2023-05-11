@@ -13,7 +13,7 @@ public abstract class CommandController<RESPONSE, REQUEST extends ICommand<RESPO
     @Autowired
     private ISpringBus springBus;
 
-    public CommandController() {
+    protected CommandController() {
     }
 
     public ResponseEntity<BaseResponse<RESPONSE>> execute(REQUEST request) {

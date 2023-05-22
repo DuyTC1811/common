@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Component
 public abstract class QueryController<RESPONSE, REQUEST extends IQuery<RESPONSE>> {
@@ -20,5 +21,5 @@ public abstract class QueryController<RESPONSE, REQUEST extends IQuery<RESPONSE>
         return new ResponseEntity<>(springBus.executeQuery(request), HttpStatus.OK);
     }
 
-    protected abstract ResponseEntity<BaseResponse<RESPONSE>> executeQuery(REQUEST request);
+    protected abstract ResponseEntity<BaseResponse<RESPONSE>> executeQuery(@RequestBody REQUEST request);
 }

@@ -13,7 +13,7 @@ public class ConverterStringUntil {
         try {
             return objectMapper.readValue(value, type);
         } catch (JsonProcessingException e) {
-            LOGGER.error("Converter Err {}", value);
+            LOGGER.error("Converter Err {} Message {}", value, e.getMessage());
         }
         return null;
     }
@@ -23,7 +23,7 @@ public class ConverterStringUntil {
         try {
             return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            LOGGER.error("Converter Err {}", object);
+            LOGGER.error("Converter Err {} Message {}", object, e.getMessage());
         }
         return null;
     }

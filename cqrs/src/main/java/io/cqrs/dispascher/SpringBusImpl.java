@@ -33,6 +33,7 @@ public class SpringBusImpl implements ISpringBus {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <RESPONSE, REQUEST extends IPage<RESPONSE>> PageResponse<RESPONSE> executePage(REQUEST pageRequest) {
         IPageHandler<RESPONSE, REQUEST> pageHandler = registry.getPage(pageRequest.getClass());
         return pageHandler.handle(pageRequest);

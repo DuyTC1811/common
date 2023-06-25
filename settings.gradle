@@ -3,4 +3,6 @@ include 'cqrs'
 include 'exceptions'
 include 'utilities'
 include 'grpc'
+include 'security'
+include 'client'
 

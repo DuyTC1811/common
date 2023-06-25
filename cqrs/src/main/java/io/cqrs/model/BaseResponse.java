@@ -24,11 +24,9 @@ public class BaseResponse<T> {
     }
 
     private T setData(T data) {
-        if (data == null) {
-            this.code = 400;
-            this.message = "Bad Request";
-            this.success = false;
-        }
+        this.code = (data == null) ? 400 : 201;
+        this.message = (data == null) ? "Bad Request" : "Success!";
+        this.success = (data != null);
         return data;
     }
 }

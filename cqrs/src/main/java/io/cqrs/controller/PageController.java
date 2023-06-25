@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Component
-public abstract class PageController<RESPONSE, REQUEST extends IPage<RESPONSE>> {
+public class PageController<RESPONSE, REQUEST extends IPage<RESPONSE>> {
     @Autowired
     private ISpringBus springBus;
 
@@ -21,6 +21,4 @@ public abstract class PageController<RESPONSE, REQUEST extends IPage<RESPONSE>> 
     public ResponseEntity<PageResponse<RESPONSE>> execute(REQUEST request) {
         return new ResponseEntity<>(springBus.executePage(request), HttpStatus.OK);
     }
-
-    protected abstract ResponseEntity<PageResponse<RESPONSE>> executePage(@RequestBody REQUEST request);
 }

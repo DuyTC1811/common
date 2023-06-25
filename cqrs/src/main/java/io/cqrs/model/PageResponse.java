@@ -4,6 +4,8 @@ import io.cqrs.enums.CodeError;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class PageResponse<T> {
@@ -12,26 +14,28 @@ public class PageResponse<T> {
     private String message;
     private int limit;
     private int offset;
-    private int totalPage;
-    private T data;
+    private int totalItems;
+    private List<T> data;
 
-    public PageResponse(T data) {
-        this.data = setData(data);
+    public PageResponse(List<T> data) {
+        this.data = data;
     }
 
-    public PageResponse(T data, CodeError code) {
+    public PageResponse(List<T> data, int limit, int offset, int totalItems) {
+        this.code = (data == null) ? 400 : 201;
+        this.message = (data == null) ? "Bad Request" : "Success!";
+        this.success = (data != null);
+        this.limit = limit;
+        this.offset = offset;
+        this.totalItems = totalItems;
+        this.data = data;
+    }
+    public PageResponse(List<T> data, int limit, int offset, CodeError code) {
         this.code = code.getCode();
         this.message = code.getName();
         this.success = true;
-        this.data = setData(data);
-    }
-
-    private T setData(T data) {
-        if (data == null) {
-            this.code = 400;
-            this.message = "Bad Request";
-            this.success = false;
-        }
-        return data;
+        this.limit = limit;
+        this.offset = offset;
+        this.data = data;
     }
 }

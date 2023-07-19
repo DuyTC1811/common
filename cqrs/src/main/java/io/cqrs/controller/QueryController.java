@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class QueryController<RESPONSE, REQUEST extends IQuery<RESPONSE>> {
+public abstract class QueryController<RESPONSE, REQUEST extends IQuery<RESPONSE>> {
     @Autowired
     private ISpringBus springBus;
 

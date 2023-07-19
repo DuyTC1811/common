@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommandController<RESPONSE, REQUEST extends ICommand<RESPONSE>> {
+public abstract class CommandController<RESPONSE, REQUEST extends ICommand<RESPONSE>> {
     @Autowired
     private ISpringBus springBus;
 

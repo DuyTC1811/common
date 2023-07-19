@@ -21,15 +21,15 @@ public class Registry {
 
     public Registry(ApplicationContext applicationContext) {
         // Register ICommandHandler
-        Arrays.stream(applicationContext.getBeanNamesForType(ICommandHandler.class))
+        Arrays.stream(applicationContext.getBeanNamesForType(ICommandHandler.class)).parallel()
                 .forEach(name -> registerCommand(applicationContext, name));
 
         // Register IQueryHandler
-        Arrays.stream(applicationContext.getBeanNamesForType(IQueryHandler.class))
+        Arrays.stream(applicationContext.getBeanNamesForType(IQueryHandler.class)).parallel()
                 .forEach(name -> registerQuery(applicationContext, name));
 
         // Register IPageHandler
-        Arrays.stream(applicationContext.getBeanNamesForType(IPageHandler.class))
+        Arrays.stream(applicationContext.getBeanNamesForType(IPageHandler.class)).parallel()
                 .forEach(name -> registerPage(applicationContext, name));
     }
 

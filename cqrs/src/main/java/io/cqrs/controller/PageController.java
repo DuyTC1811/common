@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PageController<RESPONSE, REQUEST extends IPage<RESPONSE>> {
+public abstract class PageController<RESPONSE, REQUEST extends IPage<RESPONSE>> {
     @Autowired
     private ISpringBus springBus;
 

@@ -1,17 +1,17 @@
 plugins {
     id 'idea'
     id 'java'
-    id 'com.google.protobuf' version '0.8.18'
+    id 'com.google.protobuf' version '0.9.1'
 }
 
 group 'org.monkey'
 version '0.1-SNAPSHOT'
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
-def grpcVersion = '1.51.0'
-def protobufVersion = '3.21.7'
+def grpcVersion = '1.57.0'
+def protobufVersion = '3.23.4'
 def protocVersion = protobufVersion
 
 repositories {

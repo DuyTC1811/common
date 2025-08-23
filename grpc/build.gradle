@@ -1,47 +1,64 @@
 plugins {
     id 'idea'
     id 'java'
-    id 'com.google.protobuf' version '0.9.1'
+    id 'com.google.protobuf' version '0.9.4'
 }
 
-group 'org.monkey'
-version '0.1-SNAPSHOT'
+group = 'org.monkey'
+version = '0.1-SNAPSHOT'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 
-def grpcVersion = '1.57.0'
-def protobufVersion = '3.23.4'
+def grpcVersion = '1.71.0'
+def protobufVersion = '4.32.0'
 def protocVersion = protobufVersion
 
 repositories {
-    maven { // The google mirror is less flaky than mavenCentral()
-        url "https://maven-central.storage-download.googleapis.com/maven2/" }
+    // Google mirror ít flakey hơn
+    maven { url "https://maven-central.storage-download.googleapis.com/maven2/" }
     mavenCentral()
 }
 
 dependencies {
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
-    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
-    compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+    runtimeOnly   "io.grpc:grpc-netty-shaded:${grpcVersion}"
+    implementation "com.google.protobuf:protobuf-java:${protobufVersion}"
+    // Cho Java 9+ cần javax.annotation (hoặc jakarta.annotation-api nếu lib yêu cầu)
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protocVersion}"
+    }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
     }
     generateProtoTasks {
-        all()*.plugins { grpc {} }
+        all().configureEach { task ->
+            plugins {
+                grpc {}
+            }
+        }
     }
 }
 
 sourceSets {
     main {
         java {
-            srcDirs 'build/generated/source/proto/main/grpc'
-            srcDirs 'build/generated/source/proto/main/java'
+            srcDirs 'build/generated/source/proto/main/grpc',
+                    'build/generated/source/proto/main/java'
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }

@@ -1,22 +1,39 @@
+// build.gradle (root)
 allprojects {
+    group = 'org.monkey'
+    version = '0.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
 
-    group 'org.monkey'
-    version '0.1-SNAPSHOT'
-    sourceCompatibility = '21'
-
-    repositories { mavenCentral() }
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
 
     dependencies {
+        implementation platform('org.springframework.boot:spring-boot-dependencies:3.5.5')
+
         implementation 'redis.clients:jedis:6.0.0'
         compileOnly 'org.projectlombok:lombok:1.18.38'
         annotationProcessor 'org.projectlombok:lombok:1.18.38'
-        implementation 'org.springframework.boot:spring-boot-starter-web:3.5.5'
-        implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.5.4'
+        implementation 'org.springframework.boot:spring-boot-starter-web'          // version lấy từ BOM
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'   // version lấy từ BOM
     }
 
     publishing {
+        publications {
+            create('commond', MavenPublication) {
+                from components.java
+            }
+        }
         repositories {
             maven {
                 url = uri("https://maven.pkg.github.com/DuyTC1811/common")
@@ -26,11 +43,5 @@ allprojects {
                 }
             }
         }
-        publications {
-            commond(MavenPublication) { from components.java }
-        }
     }
 }
-
-
-

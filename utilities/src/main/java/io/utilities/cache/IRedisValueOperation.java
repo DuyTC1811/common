@@ -7,5 +7,5 @@ public interface IRedisValueOperation<T> {
 
     void deletedCache(String key);
 
-    T getValue(String key);
+    T getValue(String key, Class<T> type);
 }

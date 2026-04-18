@@ -11,12 +11,10 @@ public class ConverterStringUntil {
     private static final char[] MAP = new char[65536];
 
     static {
-        // 1) identity
         for (int i = 0; i < MAP.length; i++) {
             MAP[i] = (char) i;
         }
 
-        // 2) điền các biến thể tiếng Việt (nhóm theo nguyên âm) — gọn hơn Map.entry
         mapGroup("ÀÁẠÃẢÂẤẦẨẪẬĂẮẰẲẴẶ", 'A');
         mapGroup("àáạãảâấầẩẫậăắằẳẵặ", 'a');
 
@@ -43,7 +41,7 @@ public class ConverterStringUntil {
         try {
             return objectMapper.readValue(value, type);
         } catch (JsonProcessingException e) {
-            LOGGER.error("Converter Err {} Message {}", value, e.getMessage());
+            LOGGER.error("Converter Err type {} Message {}", value, e.getMessage());
         }
         return null;
     }
@@ -65,9 +63,11 @@ public class ConverterStringUntil {
     }
 
     public static String toNoSign(String s) {
-        if (s == null || s.isEmpty()) return s;
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
 
-        // fast-path: nếu toàn ASCII thì trả luôn
+        // quick check ascii
         boolean ascii = true;
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) > 0x7F) {

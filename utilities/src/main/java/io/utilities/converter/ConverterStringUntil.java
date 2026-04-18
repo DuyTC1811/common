@@ -2,11 +2,8 @@ package io.utilities.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ConverterStringUntil {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConverterStringUntil.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final char[] MAP = new char[65536];
 
@@ -41,9 +38,8 @@ public class ConverterStringUntil {
         try {
             return objectMapper.readValue(value, type);
         } catch (JsonProcessingException e) {
-            LOGGER.error("Converter Err type {} Message {}", value, e.getMessage());
+            throw new IllegalArgumentException("Failed to deserialize JSON to " + type.getName(), e);
         }
-        return null;
     }
 
 
@@ -51,9 +47,8 @@ public class ConverterStringUntil {
         try {
             return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            LOGGER.error("Converter Err {} Message {}", object, e.getMessage());
+            throw new IllegalArgumentException("Failed to serialize object to JSON", e);
         }
-        return null;
     }
 
     private static void mapGroup(String variants, char base) {
@@ -83,11 +78,6 @@ public class ConverterStringUntil {
             out[i] = MAP[c];
         }
         return new String(out);
-    }
-
-    public static void main(String[] args) {
-        String test = "TRẦN CÔNG MINH ĐẠT";
-        System.out.println(toNoSign(test));
     }
 
 }

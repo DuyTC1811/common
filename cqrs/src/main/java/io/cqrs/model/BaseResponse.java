@@ -19,8 +19,8 @@ public class BaseResponse<T> {
     public BaseResponse(T data, CodeError code) {
         this.code = code.getCode();
         this.message = code.getName();
-        this.success = true;
-        this.data = setData(data);
+        this.success = code.getCode() == CodeError.SUCCESS.getCode();
+        this.data = data;
     }
 
     private T setData(T data) {

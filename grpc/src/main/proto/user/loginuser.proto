@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package com.devProblems;
+option java_package = "com.grpc.examples";
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+  string refreshToken = 2;
+}
+
+service Authenticator {
+  rpc authenticator(LoginRequest) returns (LoginResponse);
+}

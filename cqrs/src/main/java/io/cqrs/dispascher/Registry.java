@@ -9,26 +9,23 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.GenericTypeResolver;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 public class Registry {
 
-    private final Map<Class<? extends ICommand>, CommandProvider> commandProviderMap = new HashMap<>();
-    private final Map<Class<? extends IQuery>, QueryProvider> queryProviderMap = new HashMap<>();
-    private final Map<Class<? extends IPage>, PageProvider> qageProviderMap = new HashMap<>();
+    private final Map<Class<? extends ICommand>, CommandProvider> commandProviderMap = new ConcurrentHashMap<>();
+    private final Map<Class<? extends IQuery>, QueryProvider> queryProviderMap = new ConcurrentHashMap<>();
+    private final Map<Class<? extends IPage>, PageProvider> pageProviderMap = new ConcurrentHashMap<>();
 
     public Registry(ApplicationContext applicationContext) {
-        // Register ICommandHandler
         Arrays.stream(applicationContext.getBeanNamesForType(ICommandHandler.class)).parallel()
                 .forEach(name -> registerCommand(applicationContext, name));
 
-        // Register IQueryHandler
         Arrays.stream(applicationContext.getBeanNamesForType(IQueryHandler.class)).parallel()
                 .forEach(name -> registerQuery(applicationContext, name));
 
-        // Register IPageHandler
         Arrays.stream(applicationContext.getBeanNamesForType(IPageHandler.class)).parallel()
                 .forEach(name -> registerPage(applicationContext, name));
     }
@@ -38,7 +35,7 @@ public class Registry {
         Class<IPageHandler<?, ?>> handlerClass = (Class<IPageHandler<?, ?>>) applicationContext.getType(name);
         Class<?>[] generics = GenericTypeResolver.resolveTypeArguments(handlerClass, IPageHandler.class);
         Class<? extends IPage> pageType = (Class<? extends IPage>) generics[1];
-        qageProviderMap.put(pageType, new PageProvider(applicationContext, handlerClass));
+        pageProviderMap.put(pageType, new PageProvider(applicationContext, handlerClass));
     }
 
     @SuppressWarnings("unchecked")
@@ -58,17 +55,29 @@ public class Registry {
     }
 
     @SuppressWarnings("unchecked")
-    <RESPONSE, REQUEST extends IPage<RESPONSE>> IPageHandler<RESPONSE, REQUEST> getPage(Class<REQUEST> commandClass) {
-        return qageProviderMap.get(commandClass).get();
+    <RESPONSE, REQUEST extends IPage<RESPONSE>> IPageHandler<RESPONSE, REQUEST> getPage(Class<REQUEST> pageClass) {
+        PageProvider provider = pageProviderMap.get(pageClass);
+        if (provider == null) {
+            throw new IllegalStateException("No IPageHandler registered for " + pageClass.getName());
+        }
+        return provider.get();
     }
 
     @SuppressWarnings("unchecked")
     <RESPONSE, REQUEST extends ICommand<RESPONSE>> ICommandHandler<RESPONSE, REQUEST> getCmd(Class<REQUEST> commandClass) {
-        return commandProviderMap.get(commandClass).get();
+        CommandProvider provider = commandProviderMap.get(commandClass);
+        if (provider == null) {
+            throw new IllegalStateException("No ICommandHandler registered for " + commandClass.getName());
+        }
+        return provider.get();
     }
 
     @SuppressWarnings("unchecked")
-    <RESPONSE, REQUEST extends IQuery<RESPONSE>> IQueryHandler<RESPONSE, REQUEST> getQuery(Class<REQUEST> commandClass) {
-        return queryProviderMap.get(commandClass).get();
+    <RESPONSE, REQUEST extends IQuery<RESPONSE>> IQueryHandler<RESPONSE, REQUEST> getQuery(Class<REQUEST> queryClass) {
+        QueryProvider provider = queryProviderMap.get(queryClass);
+        if (provider == null) {
+            throw new IllegalStateException("No IQueryHandler registered for " + queryClass.getName());
+        }
+        return provider.get();
     }
 }

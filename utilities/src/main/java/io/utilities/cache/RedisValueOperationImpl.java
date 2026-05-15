@@ -1,5 +1,6 @@
 package io.utilities.cache;
 
+import io.utilities.converter.ConverterStringUntil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,14 +20,14 @@ public class RedisValueOperationImpl<T> implements IRedisValueOperation<T> {
 
     @Override
     public void pushCache(String key, T value) {
-        valueOperations.setIfAbsent(key, value.toString());
-        LOGGER.info("Push Successful : Key {}, Data {}", key, value);
+        valueOperations.setIfAbsent(key, ConverterStringUntil.converterToString(value));
+        LOGGER.info("Push Successful : Key {}", key);
     }
 
     @Override
     public void pushCache(String key, int time, T value) {
-        valueOperations.set(key, value.toString(), time, TimeUnit.MILLISECONDS);
-        LOGGER.info("Push Successful : Key => {}, Time => {}, Data => {}", key, time, value);
+        valueOperations.set(key, ConverterStringUntil.converterToString(value), time, TimeUnit.MILLISECONDS);
+        LOGGER.info("Push Successful : Key => {}, Time => {}", key, time);
     }
 
     @Override
@@ -36,7 +37,11 @@ public class RedisValueOperationImpl<T> implements IRedisValueOperation<T> {
     }
 
     @Override
-    public T getValue(String key) {
-        return (T) valueOperations.get(key);
+    public T getValue(String key, Class<T> type) {
+        String raw = valueOperations.get(key);
+        if (raw == null) {
+            return null;
+        }
+        return ConverterStringUntil.converterStringToObject(raw, type);
     }
 }
